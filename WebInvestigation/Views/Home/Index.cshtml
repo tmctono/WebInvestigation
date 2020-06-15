@@ -5,6 +5,9 @@
     <div class="text-center">
         <h1 class="display-4">Maintenance Menu</h1>
         <p>
+            @Html.ActionLink("Http Information", "", "Info")
+        </p>
+        <p>
             @Html.ActionLink("Ping to 127.0.0.1", "Ping", new PingModel
             {
                 Ip = "127.0.0.1",

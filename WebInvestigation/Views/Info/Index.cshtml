@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebInvestigation.Models.InfoModel
+
+<style>
+    tr {
+        vertical-align: top;
+    }
+
+    td {
+        vertical-align: top;
+        padding-right: 4px;
+    }
+
+    tr:first-child {
+        width: 100px;
+    }
+
+    .obj {
+        padding-top: 16px;
+        font-size: large;
+    }
+
+    .hdr1 {
+        color: #0000ff;
+        padding-top: 8px;
+    }
+
+    .hdr2 {
+        color: #0086b1;
+        padding-top: 8px;
+    }
+
+    .hdr3 {
+        color: #9f1212;
+        padding-top: 8px;
+    }
+</style>
+
+<h1>Http Information</h1>
+
+<table style="width:98%;">
+    <tbody>
+        <tr><th class="obj">Request</th></tr>
+        <tr><th class="hdr1">.IsHttps</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.IsHttps))</td></tr>
+        <tr><th class="hdr1">.Protocol</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.Protocol))</td></tr>
+        <tr><th class="hdr1">.Method</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.Method))</td></tr>
+        <tr><th class="hdr1">.ContentType</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.ContentType))</td></tr>
+        <tr><th class="hdr1">.ContentLength</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.ContentLength))</td></tr>
+        <tr><th class="hdr1">.Path</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.Path))</td></tr>
+        <tr><th class="hdr1">.PathBase</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.PathBase))</td></tr>
+        <tr><th class="hdr1">.Scheme</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.Scheme))</td></tr>
+        <tr><th class="hdr1">.QueryString</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Request.QueryString))</td></tr>
+        <tr><th class="obj">Model.Request.Headers[]</th></tr>
+        @foreach (var hd in Model.Request.Headers.OrderBy(a => a.Key))
+        {
+            <tr><th class="hdr2">[@hd.Key]</th></tr>
+            <tr><td>@Html.Raw(Model.Format(hd.Value))</td></tr>
+        }
+        <tr><th class="obj">Response</th></tr>
+        <tr><th class="hdr3">.StatusCode</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Response.StatusCode))</td></tr>
+        <tr><th class="hdr3">.ContentType</th></tr>
+        <tr><td>@Html.Raw(Model.Format(Model.Response.ContentType))</td></tr>
+    </tbody>
+</table>
+<hr />
+<h2>Server Information</h2>
+<table style="width:98%;">
+    <tbody>
+        <tr><th class="hdr1">DateTime.Now</th></tr>
+        <tr><td>@Html.Raw(Model.Format(DateTime.Now))</td></tr>
+        <tr><th class="hdr1">decimal a = 100;</th></tr>
+        <tr><td>@Html.Raw(Model.DecimalSample)</td></tr>
+        <tr><th class="hdr1">%TEMP% a local storage</th></tr>
+        <tr><td>@Html.Raw(Model.TEMP ?? "(null)")</td></tr>
+        <tr><th class="hdr1">%HOME% alias of network storage</th></tr>
+        <tr><td>@Html.Raw(Model.HOME ?? "(null)")</td></tr>
+        <tr><th class="hdr1">Environment.MachineName</th></tr>
+        <tr><td>@Html.Raw(Environment.MachineName ?? "(null)")</td></tr>
+        <tr><th class="hdr1">Environment.UserName</th></tr>
+        <tr><td>@Html.Raw(Environment.UserName ?? "(null)")</td></tr>
+        <tr><th class="hdr1">IP Addresses</th></tr>
+        <tr><td>@Html.Raw(Model.GetIPs() ?? "(n/a)")</td></tr>
+        <tr><th class="hdr1">Outbound IP Address from this Server</th></tr>
+        <tr><td>@Html.Raw(Model.GetOutboundIP() ?? "(n/a)")</td></tr>
+    </tbody>
+</table>
+
