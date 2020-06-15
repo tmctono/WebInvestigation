@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,6 +23,30 @@ namespace WebInvestigation.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        private static readonly HttpClient HTTP = new HttpClient();
+
+        public IActionResult Ping(PingModel model = null)
+        {
+            model ??= new PingModel();
+            if (!string.IsNullOrEmpty(model.Ip))
+            {
+                var res = HTTP.GetAsync($"{Request.Scheme}://{Request.Host}/api/Ping?ip={model.Ip}");
+                model.Set(res);
+            }
+            return View(model);
+        }
+
+        public IActionResult Dns(DnsModel model = null)
+        {
+            model ??= new DnsModel();
+            if (!string.IsNullOrEmpty(model.Host))
+            {
+                var res = HTTP.GetAsync($"{Request.Scheme}://{Request.Host}/api/Dns?host={model.Host}");
+                model.Set(res);
+            }
+            return View(model);
         }
 
         public IActionResult Privacy()

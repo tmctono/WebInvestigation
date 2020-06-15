@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "Dns";
+}
+@model WebInvestigation.Models.DnsModel
+
+<h1>Resolve Dns host name to IP addresses</h1>
+
+@using (Html.BeginForm("Dns", "Home", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <p>
+        @Html.TextBoxFor(model => model.Host)
+    </p>
+    <p>
+        <input type="submit" value="Resolve" />
+    </p>
+}
+<hr />
+<div id="ResultArea" class="ResultStyle">
+    <div>
+        <span class="StatusCodeCaption">Status Code : </span><span class="StatusCodeValue">@Model.HttpStatusCode</span>
+    </div>
+    <div>
+        @Html.Raw(Model.Result?.Replace(",", "<br />"))
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+    const OnSubmitClicked = (e) => {
+        $("#ResultArea").text("Resolving DNS host names...");
+    };
+    </script>
+}

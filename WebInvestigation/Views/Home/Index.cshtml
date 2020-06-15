@@ -2,7 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Maintenance Menu</h1>
+        <p>
+            @Html.ActionLink("Ping to 127.0.0.1", "Ping", new PingModel
+            {
+                Ip = "127.0.0.1",
+            })
+        </p>
+        <p>
+            @Html.ActionLink("Resolve host name localhost", "Dns", new DnsModel
+            {
+                Host = "localhost",
+            })
+        </p>
+    </div>

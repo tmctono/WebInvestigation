@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "Ping";
+}
+@model WebInvestigation.Models.PingModel
+
+<h1>Ping ip address</h1>
+
+
+@using (Html.BeginForm("Ping", "Home", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <p>
+        @Html.TextBoxFor(model => model.Ip)
+    </p>
+    <p>
+        <input type="submit" value="Ping" />
+    </p>
+}
+<hr />
+<div id="ResultArea" class="ResultStyle">
+    <div>
+        <span class="StatusCodeCaption">Status Code : </span><span class="StatusCodeValue">@Model.HttpStatusCode</span>
+    </div>
+    <div>
+        @Html.Raw(Model.Result)
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+    const OnSubmitClicked = (e) => {
+        $("#ResultArea").text("Waiting ping packet...");
+    };
+</script>
+}
