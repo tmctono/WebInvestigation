@@ -12,23 +12,9 @@ using WebInvestigation.Models;
 
 namespace WebInvestigation.Controllers
 {
-    public class SqlServerController : Controller
+    [RequireHttps]
+    public class SqlServerController : MyControllerBase
     {
-        private string GetCookie(string key, string def = "")
-        {
-            return Request.Cookies[key] ?? def;
-        }
-        private void SetCookie(string key, string value)
-        {
-            Response.Cookies.Append(key, value, new CookieOptions
-            {
-                Secure = true,
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow + TimeSpan.FromDays(14),
-            });
-        }
-
         [HttpGet]
         public IActionResult Index()
         {
@@ -40,29 +26,12 @@ namespace WebInvestigation.Controllers
             });
         }
 
-        [RequireHttps]
         [HttpPost]
         public IActionResult Index(SqlServerModel model)
         {
-            // Apply input history from cookie
-            var sc = GetCookie("SqlServerModel_ConnectionString", SqlServerModel.Default.ConnectionString);
-            if (string.IsNullOrEmpty(model.ConnectionString) || model.ConnectionString.Equals(SqlServerModel.Default.ConnectionString))
-            {
-                model.ConnectionString = sc;
-            }
-            else
-            {
-                SetCookie("SqlServerModel_ConnectionString", model.ConnectionString);
-            }
-            var sq = GetCookie("SqlServerModel_Sql", SqlServerModel.Default.Sql);
-            if (string.IsNullOrEmpty(model.Sql.Trim()) || model.Sql.Replace(" ", "").Equals(SqlServerModel.Default.Sql.Replace(" ", "")))
-            {
-                model.Sql = sq;
-            }
-            else
-            {
-                SetCookie("SqlServerModel_Sql", model.Sql);
-            }
+            PersistInput("ConnectionString", model, SqlServerModel.Default.ConnectionString);
+            PersistInput("Sql", model, SqlServerModel.Default.Sql);
+
             if (!model.SkipSql)
             {
                 try
