@@ -10,7 +10,8 @@
 @using (Html.BeginForm("Ping", "Home", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
 {
     <p>
-        @Html.TextBoxFor(model => model.Ip)
+        @Html.Label("IP Address")
+        @Html.TextBoxFor(model => model.Ip, new { @class = "FullWidthInput" })
     </p>
     <p>
         <input type="submit" value="Ping" />
@@ -27,9 +28,9 @@
 </div>
 
 @section scripts {
-<script type="text/javascript">
-    const OnSubmitClicked = (e) => {
-        $("#ResultArea").text("Waiting ping packet...");
-    };
-</script>
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting ping packet...");
+        };
+    </script>
 }

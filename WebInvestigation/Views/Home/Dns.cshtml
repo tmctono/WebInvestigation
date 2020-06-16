@@ -4,12 +4,13 @@
 }
 @model WebInvestigation.Models.DnsModel
 
-<h1>Resolve Dns host name to IP addresses</h1>
+<h1>Resolve DNS host name to IP addresses</h1>
 
 @using (Html.BeginForm("Dns", "Home", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
 {
     <p>
-        @Html.TextBoxFor(model => model.Host)
+        @Html.Label("Host name")
+        @Html.TextBoxFor(model => model.Host, new { @class = "FullWidthInput" })
     </p>
     <p>
         <input type="submit" value="Resolve" />
@@ -27,8 +28,8 @@
 
 @section scripts {
     <script type="text/javascript">
-    const OnSubmitClicked = (e) => {
-        $("#ResultArea").text("Resolving DNS host names...");
-    };
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Resolving DNS host names...");
+        };
     </script>
 }
