@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebInvestigation.Models.CallModel
+
+<h1>WebAPI Tester</h1>
+
+@using (Html.BeginForm("", "Call", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div>
+        @Html.LabelFor(m => m.Uri)
+        @Html.TextBoxFor(m => m.Uri, new { @class = "FullWidthInput" })
+    </div>
+    <div>
+        <div style="font-size:small; color: gray;"><span style="margin-right: 24px;">SAMPLE(implements variable method)</span><span>@Model.SampleUri</span></div>
+    </div>
+    <div>
+        <div style="margin-top: 16px;">@Html.LabelFor(m => m.Method)</div>
+        <div class="RadioGroup">
+            @foreach (var method in Model.GetMethodList())
+            {
+                <label class="RadioLabel">@Html.RadioButtonFor(m => m.Method, method) @method</label>
+            }
+        </div>
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Body, new { style="margin-top: 16px;" })
+        @Html.TextAreaFor(m => m.Body, new { @class = "FullWidthInput" })
+    </div>
+    <div>
+        <input type="submit" value="Execute" />
+    </div>
+    <div id="ResultArea" style="margin-top: 24px;">
+        <div>Result</div>
+        <div style="border: solid 1px #ddd;">@Html.Raw(Model.Result?.Replace(Environment.NewLine, "<br />"))</div>
+    </div>
+}
+
+
+@section scripts {
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting WebAPI Result...");
+        };
+
+        $(document).ready(() => {
+        });
+    </script>
+}

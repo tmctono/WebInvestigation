@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using WebInvestigation.Models;
+
+namespace WebInvestigation.Controllers
+{
+    [RequireHttps]
+    public class CallController : MyControllerBase
+    {
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return Index(new CallModel
+            {
+                Uri = CallModel.Default.Uri,
+                Method = CallModel.Default.Method,
+                Body = CallModel.Default.Body,
+                SkipCall = true,
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Index(CallModel model)
+        {
+            // Apply input history from cookie
+            PersistInput("Uri", model, CallModel.Default.Uri);
+            PersistInput("Method", model, CallModel.Default.Method);
+            PersistInput("Body", model, CallModel.Default.Body);
+
+            model.SampleUri = $"{Request.Scheme}://{Request.Host}/api/Dummy?a=11&b=22";
+
+            if (!model.SkipCall)
+            {
+                Task<HttpResponseMessage> task = null;
+                switch (model.Method)
+                {
+                    case "GET":
+                        task = HTTP.GetAsync(model.Uri);
+                        break;
+                    case "POST":
+                        task = HTTP.PostAsync(model.Uri, new StringContent(model.Body));
+                        break;
+                    default:
+                        var req = new HttpRequestMessage
+                        {
+                            Method = GetMethod(model.Method),
+                            RequestUri = new Uri(model.Uri),
+                            Content = new StringContent(model.Body),
+                        };
+                        task = HTTP.SendAsync(req);
+                        break;
+                }
+                model.Set(task);
+            }
+            model.SkipCall = false;
+            return View(model);
+        }
+
+        private static readonly HttpClient HTTP = new HttpClient();
+        private HttpMethod GetMethod(string name)
+        {
+            var pis = typeof(HttpMethod).GetProperties(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            var pi = pis.Where(a => name.Equals(a.Name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            var ret = (HttpMethod)pi.GetValue(null);
+            return ret;
+        }
+
+    }
+}
