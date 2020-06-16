@@ -5,16 +5,16 @@
     <div class="text-center">
         <h1 class="display-4">Maintenance Menu</h1>
         <p>
-            @Html.ActionLink("Http Information", "", "Info")
+            @Html.ActionLink("Information HTTP, Server", "", "Info")
         </p>
         <p>
-            @Html.ActionLink("Ping to 127.0.0.1", "Ping", new PingModel
+            @Html.ActionLink("PING to '127.0.0.1'", "Ping", new PingModel
             {
                 Ip = "127.0.0.1",
             })
         </p>
         <p>
-            @Html.ActionLink("Resolve host name localhost", "Dns", new DnsModel
+            @Html.ActionLink("Resolve DNS host name 'localhost'", "Dns", new DnsModel
             {
                 Host = "localhost",
             })

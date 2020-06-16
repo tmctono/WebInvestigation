@@ -45,19 +45,19 @@
                 @for (var r = 0; r < Model.Table.Count; r++)
                 {
                     var row = Model.Table[r];
-                    <tr>
-                        @foreach (var cell in row)
+                <tr>
+                    @foreach (var cell in row)
                         {
                             if (r < 2)
                             {
-                                <th>@cell</th>
+                    <th>@cell</th>
                             }
                             else
                             {
-                                <td>@cell</td>
+                    <td>@cell</td>
                             }
                         }
-                    </tr>
+                </tr>
                 }
             </table>
         </div>
