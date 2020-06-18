@@ -9,7 +9,7 @@ using WebInvestigation.Models;
 namespace WebInvestigation.Controllers
 {
     [RequireHttps]
-    public class CallController : MyControllerBase
+    public class CallController : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -27,9 +27,10 @@ namespace WebInvestigation.Controllers
         public IActionResult Index(CallModel model)
         {
             // Apply input history from cookie
-            PersistInput("Uri", model, CallModel.Default.Uri);
-            PersistInput("Method", model, CallModel.Default.Method);
-            PersistInput("Body", model, CallModel.Default.Body);
+            var cu = ControllerUtils.From(this);
+            cu.PersistInput("Uri", model, CallModel.Default.Uri);
+            cu.PersistInput("Method", model, CallModel.Default.Method);
+            cu.PersistInput("Body", model, CallModel.Default.Body);
 
             model.SampleUri = $"{Request.Scheme}://{Request.Host}/api/Dummy?a=11&b=22";
 
@@ -68,6 +69,5 @@ namespace WebInvestigation.Controllers
             var ret = (HttpMethod)pi.GetValue(null);
             return ret;
         }
-
     }
 }

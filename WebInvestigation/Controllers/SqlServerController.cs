@@ -13,7 +13,7 @@ using WebInvestigation.Models;
 namespace WebInvestigation.Controllers
 {
     [RequireHttps]
-    public class SqlServerController : MyControllerBase
+    public class SqlServerController : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -29,8 +29,9 @@ namespace WebInvestigation.Controllers
         [HttpPost]
         public IActionResult Index(SqlServerModel model)
         {
-            PersistInput("ConnectionString", model, SqlServerModel.Default.ConnectionString);
-            PersistInput("Sql", model, SqlServerModel.Default.Sql);
+            var cu = ControllerUtils.From(this);
+            cu.PersistInput("ConnectionString", model, SqlServerModel.Default.ConnectionString);
+            cu.PersistInput("Sql", model, SqlServerModel.Default.Sql);
 
             if (!model.SkipSql)
             {
