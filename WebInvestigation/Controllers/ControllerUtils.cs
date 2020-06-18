@@ -11,11 +11,18 @@ using System.Threading.Tasks;
 
 namespace WebInvestigation.Controllers
 {
-    public class MyControllerBase : Controller
+    public class ControllerUtils
     {
+        public Controller Controller { get; set; }
+
+        private const string TEXTSET64 = "wK0cskEpvVlBUXitL+byQIT5W89xRmdZAjJMe62HYSO/3u7raPCNhogzDfG1nq4F";
+        private const string KEY = "F4iK4KH4PY9eBxWA";
+        private const string MASK = "D6B7763D-43D5-492F-BAEA-0F4A1062D7AE";
+        private static readonly Random RND = new Random(DateTime.Now.Ticks.GetHashCode());
+
         protected string GetCookie(string key, string def = "")
         {
-            var cipher = Request.Cookies[key];
+            var cipher = Controller.Request.Cookies[key];
             if (string.IsNullOrEmpty(cipher))
             {
                 return def;
@@ -27,7 +34,7 @@ namespace WebInvestigation.Controllers
         }
         protected void SetCookie(string key, string value)
         {
-            Response.Cookies.Append(key, Encode(value), new CookieOptions
+            Controller.Response.Cookies.Append(key, Encode(value), new CookieOptions
             {
                 Secure = true,
                 HttpOnly = true,
@@ -36,10 +43,14 @@ namespace WebInvestigation.Controllers
             });
         }
 
-        private const string TEXTSET64 = "wK0cskEpvVlBUXitL+byQIT5W89xRmdZAjJMe62HYSO/3u7raPCNhogzDfG1nq4F";
-        private const string KEY = "F4iK4KH4PY9eBxWA";
-        private const string MASK = "D6B7763D-43D5-492F-BAEA-0F4A1062D7AE";
-        private static readonly Random RND = new Random(DateTime.Now.Ticks.GetHashCode());
+
+        public static ControllerUtils From(Controller target)
+        {
+            return new ControllerUtils
+            {
+                Controller = target,
+            };
+        }
 
         private string FusionString(string basestr, string filter)
         {
@@ -131,7 +142,7 @@ namespace WebInvestigation.Controllers
             }
         }
 
-        protected void PersistInput<TModel>(string propertyName, TModel model, string def)
+        public void PersistInput<TModel>(string propertyName, TModel model, string def)
         {
             var pp = model.GetType().GetProperty(propertyName);
             var inval = pp.GetValue(model)?.ToString() ?? "";

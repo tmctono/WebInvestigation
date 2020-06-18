@@ -47,7 +47,7 @@
         <tr><th class="hdr1">Environment.MachineName</th></tr>
         <tr><td>@Html.Raw(Environment.MachineName ?? "(null)")</td></tr>
         <tr><th class="hdr1">IP Addresses</th></tr>
-        <tr><td>@Html.Raw(Model.GetIPs() ?? "(n/a)")</td></tr>
+        <tr><td>@Html.Raw((Model.GetIPs() ?? "(n/a)").Replace(",", "<br />"))</td></tr>
         <tr><th class="hdr1">Outbound IP Address from this Server</th></tr>
         <tr><td>@Html.Raw(Model.GetOutboundIP() ?? "(n/a)")</td></tr>
         <tr><th class="hdr1">Environment.UserName</th></tr>
