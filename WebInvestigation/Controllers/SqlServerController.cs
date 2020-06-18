@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tono;
+using TonoAspNetCore;
 using WebInvestigation.Models;
 
 namespace WebInvestigation.Controllers

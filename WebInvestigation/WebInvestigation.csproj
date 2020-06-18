@@ -27,7 +27,7 @@
     <PackageReference Include="FastEnum" Version="1.5.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
-    <PackageReference Include="Tono.Logic" Version="1.0.7" />
+    <PackageReference Include="Tono.AspNetCore" Version="1.1.3" />
   </ItemGroup>
 
 </Project>
