@@ -40,8 +40,10 @@ namespace WebInvestigation.Controllers
                 Task<HttpResponseMessage> task = null;
                 switch (model.Method)
                 {
+                    case "(unknown)":
                     case "GET":
                         task = HTTP.GetAsync(model.Uri);
+                        model.Method = "GET";
                         break;
                     case "POST":
                         task = HTTP.PostAsync(model.Uri, new StringContent(model.Body));
