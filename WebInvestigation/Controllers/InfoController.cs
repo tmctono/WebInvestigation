@@ -7,6 +7,7 @@ using WebInvestigation.Models;
 
 namespace WebInvestigation.Controllers
 {
+    [RequireHttps]
     public class InfoController : Controller
     {
         public IActionResult Index()

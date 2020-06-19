@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebInvestigation.Models.KeyVaultModel
+
+<h1>Azure KeyVault Tester</h1>
+
+@using (Html.BeginForm("", "KeyVault", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div>
+        @Html.LabelFor(m => m.Url)
+        @Html.TextBoxFor(m => m.Url, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.ApplicationID)
+        @Html.TextBoxFor(m => m.ApplicationID, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.ClientSecret)
+        @Html.TextBoxFor(m => m.ClientSecret, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.Key)
+        @Html.TextBoxFor(m => m.Key, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        <input type="submit" value="Request" />
+    </div>
+    <div id="ResultArea" style="margin-top: 24px;">
+        <div>Value</div>
+        <div>@Model.ErrorMessage</div>
+        <div style="border: solid 1px #ddd;">@Html.Raw(Model.Value?.Replace(Environment.NewLine, "<br />"))</div>
+    </div>
+}
+
+
+@section scripts {
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting WebAPI Result...");
+        };
+
+        $(document).ready(() => {
+        });
+    </script>
+}
