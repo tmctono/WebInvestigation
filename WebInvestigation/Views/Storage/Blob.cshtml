@@ -1,0 +1,11 @@
+﻿@model WebInvestigation.Models.StorageModel
+
+<div>
+    @Html.LabelFor(m => m.BlobContainerName)
+    @Html.TextBoxFor(m => m.BlobContainerName, new { @class = "FullWidthInput" })
+</div>
+<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.BlobName)
+    @Html.TextBoxFor(m => m.BlobName, new { @class = "FullWidthInput" })
+</div>
+

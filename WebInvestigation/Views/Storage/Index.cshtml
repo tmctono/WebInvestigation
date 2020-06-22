@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebInvestigation.Models.StorageModel
+
+<h1>Azure Storage Tester</h1>
+
+@using (Html.BeginForm("", "Storage", FormMethod.Post, new { id = "FormStorage", onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div style="margin-bottom: 48px;">
+        <div>
+            @Html.LabelFor(m => m.StrageAccountName)
+            @Html.TextBoxFor(m => m.StrageAccountName, new { @class = "FullWidthInput" })
+        </div>
+        <div style="margin-top: 16px;">
+            @Html.LabelFor(m => m.Key)
+            @Html.TextBoxFor(m => m.Key, new { @class = "FullWidthInput" })
+        </div>
+    </div>
+    <div>
+        <ul class="nav nav-tabs">
+            @foreach (var pagename in Model.Pages)
+            {
+                <li class="nav-item">
+                    <a href="javascript:OnTabPageChanged('@pagename');" class="nav-link @(pagename == Model.Page ? "active" : "")">
+                        <img style="width: 16px; height: 16px;" src="~/img/@(pagename).svg" /> @pagename
+                    </a>
+                </li>
+            }
+        </ul>
+        <div class="tab-content">
+            @foreach (var pagename in Model.Pages)
+            {
+                <div id="@pagename" class="tab-pane @(pagename == Model.Page ? "active" : "")">
+                    <partial name="@pagename" />
+                </div>
+            }
+        </div>
+        @Html.HiddenFor(m => m.Page)
+        @Html.HiddenFor(m => m.Skip)
+    </div>
+    <div>
+        <input type="submit" value="Read as Text" style="margin-top: 48px;" />
+    </div>
+}
+<div id="ResultArea" style="margin-top: 24px;">
+    <hr />
+    <div>@Model.ErrorMessage</div>
+    <hr />
+    <div>@Html.Raw(Model.Result?.Replace(Environment.NewLine,"<br />"))</div>
+    <partial name="TableCustomResult" />
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        const OnTabPageChanged = (e) => {
+            $("#ResultArea").text("Waiting Storage result...");
+            $("#Skip").val("true");
+            $("#Page").val(e);
+            $("#FormStorage").submit();
+        };
+
+        const OnSubmitClicked = (e) => {
+        };
+
+        $(document).ready(() => {
+            $("#Skip").val("false");
+        });
+    </script>
+}
+
+

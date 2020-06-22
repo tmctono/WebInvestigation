@@ -19,16 +19,14 @@ namespace WebInvestigation.Models
         };
         public string ConnectionString { get; set; }
         public string EventHubName { get; set; }
-
         public string StorageAccountName { get; set; }
         public string StorageAccountKey { get; set; }
         public string StorageContainerName { get; set; }
         public string GetStorageConnectionString() => $"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey}";
-
         public string Message { get; set; }
-
         public string ActionMessage { get; set; }
         public bool SkipSend { get; set; }
         public bool ReceiveRequested { get; set; }
+        public TimeSpan ListeningTime { get; set; } = TimeSpan.FromMilliseconds(5000);
     }
 }

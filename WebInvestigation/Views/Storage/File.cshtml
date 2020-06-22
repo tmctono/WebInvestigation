@@ -1,0 +1,11 @@
+﻿@model WebInvestigation.Models.StorageModel
+
+<div>
+    @Html.LabelFor(m => m.FileShareName)
+    @Html.TextBoxFor(m => m.FileShareName, new { @class = "FullWidthInput" })
+</div>
+<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.FileName) <span style="color: gray; font-size: small;">Ex: \dir1\dir2\filename.ext</span>
+    @Html.TextBoxFor(m => m.FileName, new { @class = "FullWidthInput" })
+</div>
+
