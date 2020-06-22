@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebInvestigation.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.EventHubs;
+using Microsoft.Azure.EventHubs.Processor;
+using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Tono;
 using TonoAspNetCore;
-using Microsoft.Azure.EventHubs.Processor;
-using Microsoft.CodeAnalysis.Operations;
+using WebInvestigation.Models;
 
 namespace WebInvestigation.Controllers
 {

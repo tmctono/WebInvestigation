@@ -1,5 +1,3 @@
-using System;
-
 namespace WebInvestigation.Models
 {
     public class ErrorViewModel

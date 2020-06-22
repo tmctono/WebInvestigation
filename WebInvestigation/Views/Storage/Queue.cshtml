@@ -1,4 +1,12 @@
 ﻿@model WebInvestigation.Models.StorageModel
 
-<h2>Queue</h2>
+<div>
+    @Html.LabelFor(m => m.QueueName)
+    @Html.TextBoxFor(m => m.QueueName, new { @class = "FullWidthInput" })
+</div>
+@*<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.QueueMessage)
+    @Html.TextBoxFor(m => m.QueueMessage, new { @class = "FullWidthInput" })
+</div>*@
+
 

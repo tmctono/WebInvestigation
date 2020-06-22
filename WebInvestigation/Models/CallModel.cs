@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace WebInvestigation.Models
 {
@@ -25,7 +20,7 @@ namespace WebInvestigation.Models
         public string[] GetMethodList()
         {
             var t = typeof(HttpMethod);
-            var ms = t.GetProperties(System.Reflection.BindingFlags.Static| System.Reflection.BindingFlags.Public);
+            var ms = t.GetProperties(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
             var ret = ms.Select(a => a.Name.ToUpper()).OrderBy(a => a).ToArray();
             return ret;
         }

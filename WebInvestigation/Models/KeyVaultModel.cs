@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-
-namespace WebInvestigation.Models
+﻿namespace WebInvestigation.Models
 {
     public class KeyVaultModel
     {

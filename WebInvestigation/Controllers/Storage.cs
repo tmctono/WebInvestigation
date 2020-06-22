@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Azure.Storage;
+﻿using Azure.Storage;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Logging;
-using Microsoft.Rest;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.File;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using TonoAspNetCore;
 using WebInvestigation.Models;
 
@@ -38,6 +32,7 @@ namespace WebInvestigation.Controllers
                 TableName = StorageModel.Default.TableName,
                 TablePartition = StorageModel.Default.TablePartition,
                 TableKey = StorageModel.Default.TableKey,
+                QueueName = StorageModel.Default.QueueName,
             });
         }
 
@@ -173,7 +168,7 @@ namespace WebInvestigation.Controllers
             }
             catch (Exception ex)
             {
-                model.ErrorMessage = $"File Share Error : {ex.Message}";
+                model.ErrorMessage = $"Table Handling Error : {ex.Message}";
             }
 
             model.Skip = false;
@@ -181,6 +176,33 @@ namespace WebInvestigation.Controllers
         }
         public IActionResult Queue(StorageModel model)
         {
+            var cu = ControllerUtils.From(this);
+            cu.PersistInput("QueueName", model, StorageModel.Default.QueueName);
+
+            try
+            {
+                if (!model.Skip)
+                {
+                    var storageAccount = CloudStorageAccount.Parse($"DefaultEndpointsProtocol=https;AccountName={model.StrageAccountName};AccountKey={model.Key}");
+                    var qc = storageAccount.CreateCloudQueueClient();
+                    var qr = qc.GetQueueReference(model.QueueName);
+                    var mes = qr.GetMessagesAsync(1).ConfigureAwait(false).GetAwaiter().GetResult()?.FirstOrDefault();
+                    if (mes != null)
+                    {
+                        model.Result = mes.AsString;
+                    }
+                    else
+                    {
+                        model.Result = "(no message in the queue)";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                model.ErrorMessage = $"Queue Handling Error : {ex.Message}";
+            }
+
+            model.Skip = false;
             return View(model);
         }
     }
