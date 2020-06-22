@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model WebInvestigation.Models.EventHubModel
+
+<h1>EventHub Tester</h1>
+
+@using (Html.BeginForm("", "EventHub", FormMethod.Post, new { id="FormEventHub", onsubmit = "OnSubmitClicked(event)" }))
+{
+<div id="SendPart">
+    <div>
+        @Html.LabelFor(m => m.ConnectionString)
+        @Html.TextBoxFor(m => m.ConnectionString, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.EventHubName)
+        @Html.TextBoxFor(m => m.EventHubName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.StorageAccountName)
+        @Html.TextBoxFor(m => m.StorageAccountName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.StorageAccountKey)
+        @Html.TextBoxFor(m => m.StorageAccountKey, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.StorageContainerName)
+        @Html.TextBoxFor(m => m.StorageContainerName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.Message)
+        @Html.TextBoxFor(m => m.Message, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
+        @Html.CheckBoxFor(m => m.ReceiveRequested, new { style = "width: 0; visibility: hidden;" })
+        <input type="button" style="margin: 4px;" value="Send" onclick="javascript: OnSendButtonClicked(event);" />
+        <input type="button" style="margin: 4px;" value="Receive" onclick="javascript: OnReceiveButtonClicked(event);" />
+        <input type="submit" style="visibility: hidden; width: 0;" value="submit" />
+    </div>
+</div>
+    <hr />
+    <div id="ResultArea" style="margin-top: 24px;">
+        <div>@Html.Raw(Model.ActionMessage?.Replace(Environment.NewLine,"<br />"))</div>
+    </div>
+}
+
+
+@section scripts {
+    <script type="text/javascript">
+        var isSubmitOnly = true;
+        const OnSendButtonClicked = (e) => {
+            $("#ResultArea").text("Waiting EventHub response...");
+            $("#ReceiveRequested").prop('checked', false);
+            isSubmitOnly = false;
+            $("#FormEventHub").submit();
+        };
+
+        const OnReceiveButtonClicked = (e) => {
+            $("#ResultArea").text("Listening EventHub message about 5 seconds...");
+            $("#ReceiveRequested").prop('checked', true);
+            isSubmitOnly = false;
+            $("#FormEventHub").submit();
+        };
+
+        const OnSubmitClicked = (e) => {
+            if (isSubmitOnly) {
+                OnSendButtonClicked(e);
+            }
+        };
+
+        $(document).ready(() => {
+        });
+    </script>
+}
