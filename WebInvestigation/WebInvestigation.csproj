@@ -24,6 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.4" />
+    <PackageReference Include="Azure.Storage.Common" Version="12.4.3" />
     <PackageReference Include="FastEnum" Version="1.5.3" />
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="4.2.0" />
     <PackageReference Include="Microsoft.Azure.EventHubs.Processor" Version="4.2.0" />

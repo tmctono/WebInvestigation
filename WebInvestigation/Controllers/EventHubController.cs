@@ -44,7 +44,7 @@ namespace WebInvestigation.Controllers
             cu.PersistInput("StorageAccountName", model, EventHubModel.Default.StorageAccountName);
             cu.PersistInput("StorageAccountKey", model, EventHubModel.Default.StorageAccountKey);
             cu.PersistInput("StorageContainerName", model, EventHubModel.Default.StorageContainerName);
-            var receiveTimeout = TimeSpan.FromMilliseconds(4000);
+            var receiveTimeout = model.ListeningTime - TimeSpan.FromMilliseconds(500 * 2);
 
             try
             {
@@ -68,15 +68,13 @@ namespace WebInvestigation.Controllers
 
                     eph.UnregisterEventProcessorAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
+                    model.ActionMessage = "";
                     var err = ErrorMessages.ToString();
                     if (!string.IsNullOrEmpty(err))
                     {
-                        model.ActionMessage = $"{err}{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, ReceivedMessages)}";
+                        model.ActionMessage = $"{err}{Environment.NewLine}{Environment.NewLine}";
                     }
-                    else
-                    {
-                        model.ActionMessage = string.Join(Environment.NewLine, ReceivedMessages);
-                    }
+                    model.ActionMessage += $"Received {ReceivedMessages.Count} messages.{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, ReceivedMessages)}";
 
                     Task.Delay(TimeSpan.FromMilliseconds(500)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
                 }
