@@ -48,7 +48,8 @@
     <hr />
     <div>@Model.ErrorMessage</div>
     <hr />
-    <div>@Model.Result</div>
+    <div>@Html.Raw(Model.Result?.Replace(Environment.NewLine,"<br />"))</div>
+    <partial name="TableCustomResult" />
 </div>
 
 @section scripts {

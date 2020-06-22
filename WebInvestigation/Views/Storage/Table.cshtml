@@ -1,4 +1,14 @@
 ﻿@model WebInvestigation.Models.StorageModel
 
-<h2>Table</h2>
-
+<div>
+    @Html.LabelFor(m => m.TableName)
+    @Html.TextBoxFor(m => m.TableName, new { @class = "FullWidthInput" })
+</div>
+<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.TablePartition)
+    @Html.TextBoxFor(m => m.TablePartition, new { @class = "FullWidthInput" })
+</div>
+<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.TableKey)
+    @Html.TextBoxFor(m => m.TableKey, new { @class = "FullWidthInput" })
+</div>

@@ -17,6 +17,9 @@ namespace WebInvestigation.Models
             BlobName = "(Your Blob Name)",
             FileShareName = "(Your File Share Name)",
             FileName = "\\(your dir name)\\(your file name)",
+            TableName = "(Your table name)",
+            TableKey = "(Your table key)",
+            TablePartition = "(Your table partition)",
         };
         public string Page { get; set; }
         public string StrageAccountName { get; set; }
@@ -34,5 +37,10 @@ namespace WebInvestigation.Models
         public string FileShareName { get; set; }
         public string FileName { get; set; }    // \dir1\todo.txt
 
+        //=== TABLE ===
+        public string TableName { get; set; }
+        public string TablePartition { get; set; }
+        public string TableKey { get; set; }
+        public List<List<string>> TableResult { get; set; }
     }
 }
