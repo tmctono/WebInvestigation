@@ -42,6 +42,7 @@ namespace WebInvestigation.Models
 
         //=== QUEUE ===
         public string QueueName { get; set; }
-        public string QueueMessage { get; set; }
+        public bool QueueSend { get; set; }
+        public string QueueSendMessage { get; set; }
     }
 }

@@ -91,7 +91,7 @@
         @foreach (var hd in Model.Request.Headers.OrderBy(a => a.Key))
         {
             <tr><th class="hdr2">[@hd.Key]</th></tr>
-            <tr><td>@Html.Raw(Model.Format(hd.Value))</td></tr>
+            <tr><td>@Html.Raw(Model.Format(hd.Value, hd.Key == "Cookie"))</td></tr>
         }
         <tr><th class="obj">Response</th></tr>
         <tr><th class="hdr3">.StatusCode</th></tr>

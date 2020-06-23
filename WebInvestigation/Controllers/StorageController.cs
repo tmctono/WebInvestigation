@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +15,7 @@ using WebInvestigation.Models;
 namespace WebInvestigation.Controllers
 {
     [RequireHttps]
-    public class Storage : Controller
+    public class StorageController : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -44,6 +45,15 @@ namespace WebInvestigation.Controllers
             cu.PersistInput("StrageAccountName", model, StorageModel.Default.StrageAccountName);
             cu.PersistInput("Key", model, StorageModel.Default.Key);
             cu.PersistInput("Page", model, StorageModel.Default.Page);
+            cu.PersistInput("BlobContainerName", model, StorageModel.Default.BlobContainerName);
+            cu.PersistInput("BlobName", model, StorageModel.Default.BlobName);
+            cu.PersistInput("FileShareName", model, StorageModel.Default.FileShareName);
+            cu.PersistInput("FileName", model, StorageModel.Default.FileName);
+            cu.PersistInput("TableName", model, StorageModel.Default.TableName);
+            cu.PersistInput("TablePartition", model, StorageModel.Default.TablePartition);
+            cu.PersistInput("TableKey", model, StorageModel.Default.TableKey);
+            cu.PersistInput("QueueName", model, StorageModel.Default.QueueName);
+
             if (!model.Pages.Contains(model.Page))
             {
                 model.Page = "Blob";
@@ -60,10 +70,6 @@ namespace WebInvestigation.Controllers
 
         private IActionResult Blob(StorageModel model)
         {
-            var cu = ControllerUtils.From(this);
-            cu.PersistInput("BlobContainerName", model, StorageModel.Default.BlobContainerName);
-            cu.PersistInput("BlobName", model, StorageModel.Default.BlobName);
-
             try
             {
                 if (!model.Skip)
@@ -89,10 +95,6 @@ namespace WebInvestigation.Controllers
 
         public IActionResult File(StorageModel model)
         {
-            var cu = ControllerUtils.From(this);
-            cu.PersistInput("FileShareName", model, StorageModel.Default.FileShareName);
-            cu.PersistInput("FileName", model, StorageModel.Default.FileName);
-
             try
             {
                 if (!model.Skip)
@@ -121,11 +123,6 @@ namespace WebInvestigation.Controllers
         }
         public IActionResult Table(StorageModel model)
         {
-            var cu = ControllerUtils.From(this);
-            cu.PersistInput("TableName", model, StorageModel.Default.TableName);
-            cu.PersistInput("TablePartition", model, StorageModel.Default.TablePartition);
-            cu.PersistInput("TableKey", model, StorageModel.Default.TableKey);
-
             try
             {
                 if (!model.Skip)
@@ -176,9 +173,6 @@ namespace WebInvestigation.Controllers
         }
         public IActionResult Queue(StorageModel model)
         {
-            var cu = ControllerUtils.From(this);
-            cu.PersistInput("QueueName", model, StorageModel.Default.QueueName);
-
             try
             {
                 if (!model.Skip)
@@ -186,14 +180,23 @@ namespace WebInvestigation.Controllers
                     var storageAccount = CloudStorageAccount.Parse($"DefaultEndpointsProtocol=https;AccountName={model.StrageAccountName};AccountKey={model.Key}");
                     var qc = storageAccount.CreateCloudQueueClient();
                     var qr = qc.GetQueueReference(model.QueueName);
-                    var mes = qr.GetMessagesAsync(1).ConfigureAwait(false).GetAwaiter().GetResult()?.FirstOrDefault();
-                    if (mes != null)
+                    if (model.QueueSend)
                     {
-                        model.Result = mes.AsString;
+                        qr.AddMessageAsync(new CloudQueueMessage(model.QueueSendMessage)).ConfigureAwait(false).GetAwaiter().GetResult();
+                        model.Result = $"Enqueue '{model.QueueSendMessage}' to {model.QueueName}";
                     }
                     else
                     {
-                        model.Result = "(no message in the queue)";
+                        var mes = qr.GetMessagesAsync(1).ConfigureAwait(false).GetAwaiter().GetResult()?.FirstOrDefault();
+                        if (mes != null)
+                        {
+                            qr.DeleteMessageAsync(mes).ConfigureAwait(false).GetAwaiter().GetResult();
+                            model.Result = mes.AsString == null ? "(null)" : mes.AsString == "" ? "(empty)" : mes.AsString;
+                        }
+                        else
+                        {
+                            model.Result = "(no message in the queue)";
+                        }
                     }
                 }
             }
@@ -202,6 +205,7 @@ namespace WebInvestigation.Controllers
                 model.ErrorMessage = $"Queue Handling Error : {ex.Message}";
             }
 
+            model.QueueSend = false;
             model.Skip = false;
             return View(model);
         }

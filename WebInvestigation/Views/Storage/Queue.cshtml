@@ -4,9 +4,26 @@
     @Html.LabelFor(m => m.QueueName)
     @Html.TextBoxFor(m => m.QueueName, new { @class = "FullWidthInput" })
 </div>
-@*<div style="margin-top: 16px;">
-    @Html.LabelFor(m => m.QueueMessage)
-    @Html.TextBoxFor(m => m.QueueMessage, new { @class = "FullWidthInput" })
-</div>*@
+<div style="margin-top: 16px;">
+    @Html.LabelFor(m => m.QueueSendMessage)
+    @Html.TextBoxFor(m => m.QueueSendMessage, new { @class = "FullWidthInput" })
+    <input type="Button" value="Enqueue" style="margin-top: 4px;" onclick="javascript: OnEnqueueClicked(event);" />
+</div>
 
+<div>
+    @Html.HiddenFor(m => m.QueueSend)
+</div>
 
+<script type="text/javascript">
+    const OnEnqueueClicked = (e) => {
+        if (!$("#QueueSendMessage").val()) {
+            $("#ResultArea").text("To send message to the queue, input QueueSendMessage.");
+        } else {
+            $("#QueueSend").val("true");
+            $("#FormStorage").submit();
+        }
+    };
+    window.onload = function () {
+        $("#QueueSend").val("false");
+    }
+</script>

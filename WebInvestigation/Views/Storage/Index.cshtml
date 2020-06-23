@@ -41,7 +41,7 @@
         @Html.HiddenFor(m => m.Skip)
     </div>
     <div>
-        <input type="submit" value="Read as Text" style="margin-top: 48px;" />
+        <input type="submit" value="Read as Text" style="margin-top: 24px;" />
     </div>
 }
 <div id="ResultArea" style="margin-top: 24px;">
@@ -66,6 +66,10 @@
 
         $(document).ready(() => {
             $("#Skip").val("false");
+
+            if (!OnCustomLoadEvent) {
+                OnCustomLoadEvent(null);
+            }
         });
     </script>
 }
