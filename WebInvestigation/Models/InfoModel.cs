@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Tono;
 
 namespace WebInvestigation.Models
@@ -50,7 +50,7 @@ namespace WebInvestigation.Models
             return iptm;
         }
 
-        public string Format(object s)
+        public string Format(object s, bool isSort = false)
         {
             if (s == null)
             {
@@ -63,6 +63,10 @@ namespace WebInvestigation.Models
             }
             ret = ret.Replace("<script>", "＜ｓｃｒｉｐｔ＞");
             var cs = ret.Split(';');
+            if (isSort)
+            {
+                cs = cs.OrderBy(a => a).ToArray();
+            }
             if (cs.Length > 1)
             {
                 ret = "";

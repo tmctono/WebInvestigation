@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Tono;
 using TonoAspNetCore;
 using WebInvestigation.Models;
@@ -60,7 +57,7 @@ namespace WebInvestigation.Controllers
                     {
                         // remove input TOP(*) word
                         var mstr = Regex.Match(sql, "\\s+[Tt][Oo][Pp]\\s*\\(\\d+\\)\\s+");
-                        if(mstr.Success)
+                        if (mstr.Success)
                         {
                             sql = sql.Replace(mstr.Value, " ");
                         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebInvestigation.Controllers;
+﻿using System.Collections.Generic;
 
 namespace WebInvestigation.Models
 {
@@ -20,6 +16,7 @@ namespace WebInvestigation.Models
             TableName = "(Your table name)",
             TableKey = "(Your table key)",
             TablePartition = "(Your table partition)",
+            QueueName = "(Your queue name)",
         };
         public string Page { get; set; }
         public string StrageAccountName { get; set; }
@@ -42,5 +39,10 @@ namespace WebInvestigation.Models
         public string TablePartition { get; set; }
         public string TableKey { get; set; }
         public List<List<string>> TableResult { get; set; }
+
+        //=== QUEUE ===
+        public string QueueName { get; set; }
+        public bool QueueSend { get; set; }
+        public string QueueSendMessage { get; set; }
     }
 }
