@@ -18,5 +18,7 @@ Function|Description
 /Call|Call WebAPI from the server. You can choose method GET, POST and others.
 /SqlServer|Try to connect to an Azure SQL Server from the server. You can use SQL command directly.
 
+## Note  
 
+To use full WebInvestigation function, turn "Firewall mode" Detection if you have Azure Application Gateway because WebInvestigation POSTs SQL command, Rest request text.
 
