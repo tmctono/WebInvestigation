@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿// (c) 2020 Manabu Tonosaki
+// Licensed under the MIT license.
+
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebInvestigation.Models

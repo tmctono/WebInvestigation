@@ -1,0 +1,76 @@
+﻿@*(c) 2020 Manabu Tonosaki
+    Licensed under the MIT license.*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+@model WebInvestigation.Models.RedisModel
+
+<style>
+    table th, table td {
+        border: solid 1px #ccc;
+        font-size: small;
+        font-family: Courier New, Courier, monospace;
+        font-weight: normal;
+        color: black;
+        vertical-align: top;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    table th {
+        color: #cc6400;
+        background: #fff5e5;
+    }
+</style>
+
+<h1>Azure Cache for Redis Control</h1>
+
+@using (Html.BeginForm("", "Redis", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div>
+        @Html.LabelFor(m => m.HostName)
+        @Html.TextBoxFor(m => m.HostName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        @Html.LabelFor(m => m.AccessKey)
+        @Html.TextBoxFor(m => m.AccessKey, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        @Html.LabelFor(m => m.Key)
+        @Html.TextBoxFor(m => m.Key, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        @Html.LabelFor(m => m.Value)
+        @Html.TextBoxFor(m => m.Value, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        <div style="margin-top: 16px;">@Html.LabelFor(m => m.Mode)</div>
+        <div class="RadioGroup">
+            @foreach (var mode in Model.GetModeList())
+            {
+                <label class="RadioLabel">@Html.RadioButtonFor(m => m.Mode, mode) @mode</label>
+            }
+        </div>
+    </div>
+    <div style="margin-top: 16px;">
+        <input type="submit" value="Execute" />
+    </div>
+    <hr />
+    <div id="ResultArea">
+        <div>@Model.ErrorMessage</div>
+        <div>@Model.Result</div>
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting Redis server response...");
+        };
+
+        $(document).ready(() => {
+        });
+    </script>
+}
+

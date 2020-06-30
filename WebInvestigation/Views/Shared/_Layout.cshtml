@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@*(c) 2020 Manabu Tonosaki
+    Licensed under the MIT license.*@
+
+<!DOCTYPE html>
 
 @{
     var isLocal = Context.Request.Host.Host == "localhost";
@@ -41,6 +44,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Storage" asp-action="Index">Storage</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Redis" asp-action="Index">Redis</a>
                         </li>
                     </ul>
                 </div>

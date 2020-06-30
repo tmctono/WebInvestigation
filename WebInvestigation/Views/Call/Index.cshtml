@@ -1,4 +1,6 @@
-﻿
+﻿@*(c) 2020 Manabu Tonosaki
+Licensed under the MIT license.*@
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,7 +27,7 @@
         </div>
     </div>
     <div>
-        @Html.LabelFor(m => m.Body, new { style="margin-top: 16px;" })
+        @Html.LabelFor(m => m.Body, new { style = "margin-top: 16px;" })
         @Html.TextAreaFor(m => m.Body, new { @class = "FullWidthInput" })
     </div>
     <div>
