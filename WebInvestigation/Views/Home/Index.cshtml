@@ -1,9 +1,12 @@
-﻿@{
+﻿@*(c) 2020 Manabu Tonosaki
+    Licensed under the MIT license.*@
+@{
     ViewData["Title"] = "Home Page";
 }
 
     <div class="text-center">
-        <h1 class="display-4">Maintenance Menu</h1>
+        <h1 class="display-4">Investigation Menu</h1>
+        <p>[At Server]</p>
         <p>
             @Html.ActionLink("Information HTTP, Server", "", "Info")
         </p>
@@ -34,4 +37,12 @@
         <p>
             @Html.ActionLink("Storage Test", "", "Storage")
         </p>
+        <p>
+            @Html.ActionLink("Azure Cache for Redis Test", "", "Redis")
+        </p>
+        <p>
+            @Html.ActionLink("Controller for Health check", "", "Health")
+        </p>
+        <p></p>
+        <p><a href="https://github.com/tmctono/WebInvestigation/blob/master/README.md">About...</a></p>
     </div>

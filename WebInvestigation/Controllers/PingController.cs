@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// (c) 2020 Manabu Tonosaki
+// Licensed under the MIT license.
+
+using Microsoft.AspNetCore.Mvc;
 using System.Net.NetworkInformation;
 using System.Text;
 

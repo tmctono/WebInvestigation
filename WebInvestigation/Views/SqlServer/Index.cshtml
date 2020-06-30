@@ -1,75 +1,76 @@
-﻿
+﻿@*(c) 2020 Manabu Tonosaki
+    Licensed under the MIT license.*@
 @{
     ViewData["Title"] = "Index";
 }
 @model WebInvestigation.Models.SqlServerModel
 
-    <style>
-        table th, table td {
-            border: solid 1px #ccc;
-            font-size: small;
-            font-family: Courier New, Courier, monospace;
-            font-weight: normal;
-            color: black;
-            vertical-align: top;
-            padding-left: 4px;
-            padding-right: 4px;
-        }
+<style>
+    table th, table td {
+        border: solid 1px #ccc;
+        font-size: small;
+        font-family: Courier New, Courier, monospace;
+        font-weight: normal;
+        color: black;
+        vertical-align: top;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
 
-        table th {
-            color: #cc6400;
-            background: #fff5e5;
-        }
-    </style>
+    table th {
+        color: #cc6400;
+        background: #fff5e5;
+    }
+</style>
 
-    <h1>SQL Server Control</h1>
+<h1>SQL Server Control</h1>
 
-    @using (Html.BeginForm("", "SqlServer", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
-    {
-        <div>
-            @Html.LabelFor(m => m.ConnectionString)
-            @Html.TextBoxFor(m => m.ConnectionString, new { @class = "SqlServerConnectionString" })
-        </div>
-        <div>
-            @Html.LabelFor(m => m.Sql)
-            @Html.TextBoxFor(m => m.Sql, new { @class = "SqlServerSqlString" })
-        </div>
-        <div>
-            <input type="submit" value="Execute" />
-        </div>
-        <hr />
-        <div id="ResultArea">
-            <div>@Model.ErrorMessage</div>
-            <div style="font-size:small; color: lightgray; margin: 8px;">@Model.LatestSql</div>
-            <table>
-                @for (var r = 0; r < Model.Table.Count; r++)
-                {
-                    var row = Model.Table[r];
+@using (Html.BeginForm("", "SqlServer", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div>
+        @Html.LabelFor(m => m.ConnectionString)
+        @Html.TextBoxFor(m => m.ConnectionString, new { @class = "SqlServerConnectionString" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Sql)
+        @Html.TextBoxFor(m => m.Sql, new { @class = "SqlServerSqlString" })
+    </div>
+    <div>
+        <input type="submit" value="Execute" />
+    </div>
+    <hr />
+    <div id="ResultArea">
+        <div>@Model.ErrorMessage</div>
+        <div style="font-size:small; color: lightgray; margin: 8px;">@Model.LatestSql</div>
+        <table>
+            @for (var r = 0; r < Model.Table.Count; r++)
+            {
+                var row = Model.Table[r];
                 <tr>
                     @foreach (var cell in row)
+                    {
+                        if (r < 2)
                         {
-                            if (r < 2)
-                            {
-                    <th>@cell</th>
-                            }
-                            else
-                            {
-                    <td>@cell</td>
-                            }
+                            <th>@cell</th>
                         }
+                        else
+                        {
+                            <td>@cell</td>
+                        }
+                    }
                 </tr>
-                }
-            </table>
-        </div>
-    }
+            }
+        </table>
+    </div>
+}
 
-    @section scripts {
-        <script type="text/javascript">
-            const OnSubmitClicked = (e) => {
-                $("#ResultArea").text("Waiting SQL Open, Query and Close connection...");
-            };
+@section scripts {
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting SQL Open, Query and Close connection...");
+        };
 
-            $(document).ready(() => {
-            });
-        </script>
-    }
+        $(document).ready(() => {
+        });
+    </script>
+}

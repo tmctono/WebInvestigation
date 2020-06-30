@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// (c) 2020 Manabu Tonosaki
+// Licensed under the MIT license.
+
+using System.Collections.Generic;
 
 namespace WebInvestigation.Models
 {

@@ -1,4 +1,7 @@
-﻿using Azure.Storage;
+﻿// (c) 2020 Manabu Tonosaki
+// Licensed under the MIT license.
+
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage;
