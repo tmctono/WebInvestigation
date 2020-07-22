@@ -1,0 +1,41 @@
+﻿@*(c) 2020 Manabu Tonosaki
+    Licensed under the MIT license.*@
+@{
+    ViewData["Title"] = "Index";
+}
+
+@model WebInvestigation.Models.IotModel
+
+<h1>Azure Cache for Redis Control</h1>
+
+@using (Html.BeginForm("", "Iot", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
+{
+    <div>
+        @Html.LabelFor(m => m.DeviceId)
+        @Html.TextBoxFor(m => m.DeviceId, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        @Html.LabelFor(m => m.DeviceKey)
+        @Html.TextBoxFor(m => m.DeviceKey, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        <input type="submit" value="Execute" />
+    </div>
+    <hr />
+    <div id="ResultArea">
+        <div>@Model.ErrorMessage</div>
+        <div>@Model.Result</div>
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        const OnSubmitClicked = (e) => {
+            $("#ResultArea").text("Waiting Redis server response...");
+        };
+
+        $(document).ready(() => {
+        });
+    </script>
+}
+
