@@ -11,12 +11,29 @@
 @using (Html.BeginForm("", "Iot", FormMethod.Post, new { onsubmit = "OnSubmitClicked(event)" }))
 {
     <div>
+        @Html.LabelFor(m => m.HostName)
+        @Html.TextBoxFor(m => m.HostName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
         @Html.LabelFor(m => m.DeviceId)
         @Html.TextBoxFor(m => m.DeviceId, new { @class = "FullWidthInput" })
     </div>
     <div style="margin-top: 16px;">
         @Html.LabelFor(m => m.DeviceKey)
         @Html.TextBoxFor(m => m.DeviceKey, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top: 16px;">
+        <div style="margin-top: 16px;">@Html.LabelFor(m => m.TransportType)</div>
+        <div class="RadioGroup">
+            @foreach (var ttype in Model.GetTransportTypeList())
+            {
+                <label class="RadioLabel">@Html.RadioButtonFor(m => m.TransportType, ttype) @ttype</label>
+            }
+        </div>
+    </div>
+    <div style="margin-top: 16px;">
+        @Html.LabelFor(m => m.Message)
+        @Html.TextBoxFor(m => m.Message, new { @class = "FullWidthInput" })
     </div>
     <div style="margin-top: 16px;">
         <input type="submit" value="Execute" />
@@ -31,7 +48,7 @@
 @section scripts {
     <script type="text/javascript">
         const OnSubmitClicked = (e) => {
-            $("#ResultArea").text("Waiting Redis server response...");
+            $("#ResultArea").text("Waiting IoT Hub device client response...");
         };
 
         $(document).ready(() => {
