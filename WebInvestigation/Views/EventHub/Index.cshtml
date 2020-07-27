@@ -20,6 +20,10 @@ Licensed under the MIT license.*@
         @Html.TextBoxFor(m => m.EventHubName, new { @class = "FullWidthInput" })
     </div>
     <div style="margin-top:16px;">
+        @Html.LabelFor(m => m.ConsumerGroupName)
+        @Html.TextBoxFor(m => m.ConsumerGroupName, new { @class = "FullWidthInput" })
+    </div>
+    <div style="margin-top:16px;">
         @Html.LabelFor(m => m.StorageAccountName)
         @Html.TextBoxFor(m => m.StorageAccountName, new { @class = "FullWidthInput" })
     </div>
@@ -60,7 +64,7 @@ Licensed under the MIT license.*@
         };
 
         const OnReceiveButtonClicked = (e) => {
-            $("#ResultArea").text("Listening EventHub message about 5 seconds...");
+            $("#ResultArea").text("Listening EventHub message about few seconds...");
             $("#ReceiveRequested").prop('checked', true);
             isSubmitOnly = false;
             $("#FormEventHub").submit();

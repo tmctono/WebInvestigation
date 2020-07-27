@@ -2,6 +2,8 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Net;
@@ -14,6 +16,7 @@ namespace WebInvestigation.Models
     {
         public HttpRequest Request { get; set; }
         public HttpResponse Response { get; set; }
+        public string OutboundIP { get; set; }
 
         public decimal DecimalSample = 100;
         public string TEMP => Environment.GetEnvironmentVariable("TEMP");
@@ -45,11 +48,38 @@ namespace WebInvestigation.Models
         public string GetOutboundIP()
         {
             var restask = HTTP.GetAsync($"https://aqtono.com/ci.php?dummy={MathUtil.Rand(10000000, 99999999)}");
-            restask.Wait();
-            var res = restask.Result;
+            var res = restask.ConfigureAwait(false).GetAwaiter().GetResult();
             var iptm = res.Content.ReadAsStringAsync().Result;
-            return iptm;
+            OutboundIP = StrUtil.LeftBefore(iptm, "<[Bb][Rr]");
+            return OutboundIP;
         }
+
+        /// <summary>
+        /// Get RDAP Name/Country
+        /// </summary>
+        /// <returns>Not used</returns>
+        public string RDap()
+        {
+            throw new NotSupportedException();
+
+            if (string.IsNullOrEmpty(OutboundIP))
+            {
+                GetOutboundIP();
+            }
+            var restask = HTTP.GetAsync($"https://rdap.apnic.net/ip/{OutboundIP}");
+            var res = restask.ConfigureAwait(false).GetAwaiter().GetResult();
+            var rdap = res.Content.ReadAsStringAsync().Result;
+            string name = null;
+            string country = null;
+            if (JsonConvert.DeserializeObject(rdap) is JObject jo)
+            {
+                var map = jo.Children().Select(a => a as JProperty).ToDictionary(a => a.Name);
+                name = map.GetValueOrDefault("name")?.Value?.ToString();
+                country = map.GetValueOrDefault("country")?.Value?.ToString();
+            }
+            return $"{res.RequestMessage.RequestUri.Host} - <b>{(name ?? "(n/a)")}</b> ({(country ?? "?")})";
+        }
+
 
         public string Format(object s, bool isSort = false)
         {
