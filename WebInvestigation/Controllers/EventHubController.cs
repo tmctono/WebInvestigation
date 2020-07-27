@@ -42,10 +42,16 @@ namespace WebInvestigation.Controllers
             var cu = ControllerUtils.From(this);
             cu.PersistInput("ConnectionString", model, EventHubModel.Default.ConnectionString);
             cu.PersistInput("EventHubName", model, EventHubModel.Default.EventHubName);
+            cu.PersistInput("ConsumerGroupName", model, EventHubModel.Default.ConsumerGroupName);
             cu.PersistInput("StorageAccountName", model, EventHubModel.Default.StorageAccountName);
             cu.PersistInput("StorageAccountKey", model, EventHubModel.Default.StorageAccountKey);
             cu.PersistInput("StorageContainerName", model, EventHubModel.Default.StorageContainerName);
-            var receiveTimeout = model.ListeningTime - TimeSpan.FromMilliseconds(500 * 2);
+
+            var receiveTimeout = model.ListeningTime - TimeSpan.FromMilliseconds(200 * 2);
+            if( model.ConsumerGroupName == EventHubModel.Default.ConsumerGroupName)
+            {
+                model.ConsumerGroupName = PartitionReceiver.DefaultConsumerGroupName;
+            }
 
             try
             {
@@ -53,7 +59,7 @@ namespace WebInvestigation.Controllers
                 {
                     var eph = new EventProcessorHost(
                         model.EventHubName,
-                        PartitionReceiver.DefaultConsumerGroupName,
+                        model.ConsumerGroupName,
                         model.ConnectionString,
                         model.GetStorageConnectionString(),
                         model.StorageContainerName);
@@ -65,7 +71,7 @@ namespace WebInvestigation.Controllers
                     }
                     ).ConfigureAwait(false).GetAwaiter().GetResult();
 
-                    Task.Delay(receiveTimeout + TimeSpan.FromMilliseconds(500)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
+                    Task.Delay(receiveTimeout + TimeSpan.FromMilliseconds(200)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
 
                     eph.UnregisterEventProcessorAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
@@ -77,7 +83,7 @@ namespace WebInvestigation.Controllers
                     }
                     model.ActionMessage += $"Received {ReceivedMessages.Count} messages.{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, ReceivedMessages)}";
 
-                    Task.Delay(TimeSpan.FromMilliseconds(500)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
+                    Task.Delay(TimeSpan.FromMilliseconds(200)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
                 }
                 else
                 if (!model.SkipSend)
