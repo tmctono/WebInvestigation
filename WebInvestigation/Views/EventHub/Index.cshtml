@@ -24,12 +24,8 @@ Licensed under the MIT license.*@
         @Html.TextBoxFor(m => m.ConsumerGroupName, new { @class = "FullWidthInput" })
     </div>
     <div style="margin-top:16px;">
-        @Html.LabelFor(m => m.StorageAccountName)
-        @Html.TextBoxFor(m => m.StorageAccountName, new { @class = "FullWidthInput" })
-    </div>
-    <div style="margin-top:16px;">
-        @Html.LabelFor(m => m.StorageAccountKey)
-        @Html.TextBoxFor(m => m.StorageAccountKey, new { @class = "FullWidthInput" })
+        @Html.LabelFor(m => m.StorageConnectionString)
+        @Html.TextBoxFor(m => m.StorageConnectionString, new { @class = "FullWidthInput" })
     </div>
     <div style="margin-top:16px;">
         @Html.LabelFor(m => m.StorageContainerName)

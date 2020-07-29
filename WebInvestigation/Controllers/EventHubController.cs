@@ -27,8 +27,7 @@ namespace WebInvestigation.Controllers
             {
                 ConnectionString = EventHubModel.Default.ConnectionString,
                 EventHubName = EventHubModel.Default.EventHubName,
-                StorageAccountName = EventHubModel.Default.StorageAccountName,
-                StorageAccountKey = EventHubModel.Default.StorageAccountKey,
+                StorageConnectionString = EventHubModel.Default.StorageConnectionString,
                 StorageContainerName = EventHubModel.Default.StorageContainerName,
                 Message = $"{EventHubModel.Default.Message} at {DateTime.Now.ToString(TimeUtil.FormatYMDHMS)}",
                 SkipSend = true,
@@ -43,8 +42,7 @@ namespace WebInvestigation.Controllers
             cu.PersistInput("ConnectionString", model, EventHubModel.Default.ConnectionString);
             cu.PersistInput("EventHubName", model, EventHubModel.Default.EventHubName);
             cu.PersistInput("ConsumerGroupName", model, EventHubModel.Default.ConsumerGroupName);
-            cu.PersistInput("StorageAccountName", model, EventHubModel.Default.StorageAccountName);
-            cu.PersistInput("StorageAccountKey", model, EventHubModel.Default.StorageAccountKey);
+            cu.PersistInput("StorageConnectionString", model, EventHubModel.Default.StorageConnectionString);
             cu.PersistInput("StorageContainerName", model, EventHubModel.Default.StorageContainerName);
 
             var receiveTimeout = model.ListeningTime - TimeSpan.FromMilliseconds(200 * 2);
@@ -61,7 +59,7 @@ namespace WebInvestigation.Controllers
                         model.EventHubName,
                         model.ConsumerGroupName,
                         model.ConnectionString,
-                        model.GetStorageConnectionString(),
+                        model.StorageConnectionString,
                         model.StorageContainerName);
 
                     eph.RegisterEventProcessorFactoryAsync(this, new EventProcessorOptions
