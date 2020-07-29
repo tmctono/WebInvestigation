@@ -7,6 +7,8 @@ using WebInvestigation.Models;
 namespace WebInvestigation.Controllers
 {
     [RequireHttps]
+    [Route("poc/Info")]
+    [Route("Info")]
     public class InfoController : Controller
     {
         public IActionResult Index()
