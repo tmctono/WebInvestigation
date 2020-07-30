@@ -25,6 +25,6 @@ namespace WebInvestigation.Models
         public string ActionMessage { get; set; }
         public bool SkipSend { get; set; }
         public bool ReceiveRequested { get; set; }
-        public TimeSpan ListeningTime { get; set; } = TimeSpan.FromMilliseconds(2000);
+        public TimeSpan ListeningTime { get; set; } = TimeSpan.FromMilliseconds(5000);
     }
 }
