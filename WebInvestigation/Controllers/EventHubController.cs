@@ -65,7 +65,7 @@ namespace WebInvestigation.Controllers
                     eph.RegisterEventProcessorFactoryAsync(this, new EventProcessorOptions
                     {
                         InvokeProcessorAfterReceiveTimeout = true,
-                        ReceiveTimeout = receiveTimeout,
+                        ReceiveTimeout = receiveTimeout,    // It's necessary to set long time here. (1.6sec was not enough at 2020.7.30)
                     }
                     ).ConfigureAwait(false).GetAwaiter().GetResult();
 
