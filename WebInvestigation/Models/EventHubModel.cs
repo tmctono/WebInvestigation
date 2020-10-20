@@ -1,7 +1,9 @@
 ﻿// (c) 2020 Manabu Tonosaki
 // Licensed under the MIT license.
 
+using Microsoft.Azure.EventHubs;
 using System;
+using System.Collections.Generic;
 
 namespace WebInvestigation.Models
 {
@@ -26,5 +28,6 @@ namespace WebInvestigation.Models
         public bool SkipSend { get; set; }
         public bool ReceiveRequested { get; set; }
         public TimeSpan ListeningTime { get; set; } = TimeSpan.FromMilliseconds(5000);
+        public Dictionary<int, EventHubPartitionRuntimeInformation> PartitionInfo { get; set; }
     }
 }
