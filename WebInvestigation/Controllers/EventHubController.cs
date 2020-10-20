@@ -4,8 +4,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.EventHubs.Processor;
+using Pipelines.Sockets.Unofficial.Arenas;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tono;
@@ -93,6 +95,23 @@ namespace WebInvestigation.Controllers
                     var ec = EventHubClient.CreateFromConnectionString(cs.ToString()); // WARNING : Max # of TCP socket because of each instance created by Http Request
                     ec.SendAsync(new EventData(Encoding.UTF8.GetBytes(model.Message))).ConfigureAwait(false).GetAwaiter().GetResult();
                     model.ActionMessage = $"OK : Sent '{model.Message}' to {model.EventHubName}";
+
+                    // Collect Partition Information
+                    for ( var i = 0; i < 32; i++)
+                    {
+                        try
+                        {
+                            if( model.PartitionInfo == null)
+                            {
+                                model.PartitionInfo = new Dictionary<int, EventHubPartitionRuntimeInformation>();
+                            }
+                            model.PartitionInfo[i] = ec.GetPartitionRuntimeInformationAsync($"{i}").ConfigureAwait(false).GetAwaiter().GetResult();
+                        }
+                        catch
+                        {
+                            model.PartitionInfo[i] = null;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
