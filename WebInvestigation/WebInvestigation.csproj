@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/mtonosaki/WebInvestigation</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <ApplicationIcon>WebInvestigationIcon.ico</ApplicationIcon>
+    <UserSecretsId>35ba611b-7ee9-4b5a-aa41-3685b1fec6bb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
