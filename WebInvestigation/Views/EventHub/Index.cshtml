@@ -67,7 +67,7 @@
 
     @if(Model.PartitionInfo != null )
     {
-        <div>
+        <div style="margin-top: 8px;">
             <table>
                 <tr>
                     <th>Partition ID</th>
@@ -77,18 +77,15 @@
                     <th>LastEnqueuedTimeUtc</th>
                 </tr>
 
-                @for( var i = 0; i < 32; i++ )
+                @foreach( var pid in Model.PartitionInfo?.Keys )
                 {
-                    @if( Model.PartitionInfo[i] != null )
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td>@Model.PartitionInfo[i]?.BeginSequenceNumber</td>
-                            <td>@Model.PartitionInfo[i]?.LastEnqueuedOffset</td>
-                            <td>@Model.PartitionInfo[i]?.LastEnqueuedSequenceNumber</td>
-                            <td>@Model.PartitionInfo[i]?.LastEnqueuedTimeUtc.ToString("yyyy/MM/dd HH:mm:ss")</td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@pid</td>
+                        <td>@Model.PartitionInfo[pid].BeginSequenceNumber</td>
+                        <td>@Model.PartitionInfo[pid].LastEnqueuedOffset</td>
+                        <td>@Model.PartitionInfo[pid].LastEnqueuedSequenceNumber</td>
+                        <td>@Model.PartitionInfo[pid].LastEnqueuedTimeUtc.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                    </tr>
                 }
             </table>
         </div>

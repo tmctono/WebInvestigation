@@ -28,6 +28,6 @@ namespace WebInvestigation.Models
         public bool SkipSend { get; set; }
         public bool ReceiveRequested { get; set; }
         public TimeSpan ListeningTime { get; set; } = TimeSpan.FromMilliseconds(5000);
-        public Dictionary<int, EventHubPartitionRuntimeInformation> PartitionInfo { get; set; }
+        public Dictionary<string, EventHubPartitionRuntimeInformation> PartitionInfo { get; set; }
     }
 }

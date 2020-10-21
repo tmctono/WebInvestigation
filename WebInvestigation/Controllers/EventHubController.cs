@@ -8,6 +8,7 @@ using Pipelines.Sockets.Unofficial.Arenas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Tono;
@@ -48,13 +49,20 @@ namespace WebInvestigation.Controllers
             cu.PersistInput("StorageContainerName", model, EventHubModel.Default.StorageContainerName);
 
             var receiveTimeout = model.ListeningTime - TimeSpan.FromMilliseconds(200 * 2);
-            if( model.ConsumerGroupName == EventHubModel.Default.ConsumerGroupName)
+            if (model.ConsumerGroupName == EventHubModel.Default.ConsumerGroupName)
             {
                 model.ConsumerGroupName = PartitionReceiver.DefaultConsumerGroupName;
             }
 
             try
             {
+                var cs = new EventHubsConnectionStringBuilder(model.ConnectionString)
+                {
+                    EntityPath = model.EventHubName,
+                };
+                var ec = EventHubClient.CreateFromConnectionString(cs.ToString()); // WARNING : Max # of TCP socket because of each instance created by Http Request
+
+
                 if (model.ReceiveRequested)
                 {
                     var eph = new EventProcessorHost(
@@ -81,42 +89,50 @@ namespace WebInvestigation.Controllers
                     {
                         model.ActionMessage = $"{err}{Environment.NewLine}{Environment.NewLine}";
                     }
-                    model.ActionMessage += $"Received {ReceivedMessages.Count} messages.{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, ReceivedMessages)}";
+                    model.ActionMessage += $"Received {ReceivedMessages.Count} messages.{Environment.NewLine}{Environment.NewLine}{string.Join(Environment.NewLine, ReceivedMessages.Where(a => a != null))}";
+                    if (ReceivedMessages.Count > 5)
+                    {
+                        model.ActionMessage += $"{Environment.NewLine}...more";
+                    }
 
                     Task.Delay(TimeSpan.FromMilliseconds(200)).ConfigureAwait(false).GetAwaiter().GetResult();    // wait message received
                 }
                 else
                 if (!model.SkipSend)
                 {
-                    var cs = new EventHubsConnectionStringBuilder(model.ConnectionString)
-                    {
-                        EntityPath = model.EventHubName,
-                    };
-                    var ec = EventHubClient.CreateFromConnectionString(cs.ToString()); // WARNING : Max # of TCP socket because of each instance created by Http Request
                     ec.SendAsync(new EventData(Encoding.UTF8.GetBytes(model.Message))).ConfigureAwait(false).GetAwaiter().GetResult();
                     model.ActionMessage = $"OK : Sent '{model.Message}' to {model.EventHubName}";
+                }
 
-                    // Collect Partition Information
-                    for ( var i = 0; i < 32; i++)
+                // Collect Partition Information
+                var isNetError = false;
+                var runtimeInfo = ec.GetRuntimeInformationAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+                foreach (var pid in runtimeInfo.PartitionIds)
+                {
+                    if (isNetError == false)
                     {
                         try
                         {
-                            if( model.PartitionInfo == null)
+                            var pi = ec.GetPartitionRuntimeInformationAsync(pid).ConfigureAwait(false).GetAwaiter().GetResult();
+                            if (model.PartitionInfo == null)
                             {
-                                model.PartitionInfo = new Dictionary<int, EventHubPartitionRuntimeInformation>();
+                                model.PartitionInfo = new Dictionary<string, EventHubPartitionRuntimeInformation>();
                             }
-                            model.PartitionInfo[i] = ec.GetPartitionRuntimeInformationAsync($"{i}").ConfigureAwait(false).GetAwaiter().GetResult();
+                            model.PartitionInfo[pid] = pi;
                         }
-                        catch
+                        catch (SocketException ex)
                         {
-                            model.PartitionInfo[i] = null;
+                            throw ex;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                model.ActionMessage = $"ERROR : {ex.Message}";
+                for (var exx = ex; exx != null; exx = ex.InnerException)
+                {
+                    model.ActionMessage = $"ERROR : {exx.Message}{Environment.NewLine}";
+                }
             }
 
             model.ReceiveRequested = false;
@@ -158,7 +174,14 @@ namespace WebInvestigation.Controllers
             foreach (var eventData in messages)
             {
                 var data = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
-                Controller.ReceivedMessages.Add(data);
+                if (Controller.ReceivedMessages.Count < 5)
+                {
+                    Controller.ReceivedMessages.Add(data);
+                }
+                else
+                {
+                    Controller.ReceivedMessages.Add(null);
+                }
             }
             return context.CheckpointAsync();
         }
