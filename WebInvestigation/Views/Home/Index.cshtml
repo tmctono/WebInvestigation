@@ -4,48 +4,67 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Investigation Menu</h1>
-        <p>[At Server]</p>
-        <p>
-            @Html.ActionLink("Information HTTP, Server", "", "Info")
-        </p>
-        <p>
-            @Html.ActionLink("PING to '127.0.0.1'", "Ping", new PingModel
-            {
-                Ip = "127.0.0.1",
-            })
-        </p>
-        <p>
-            @Html.ActionLink("Resolve DNS host name 'localhost'", "Dns", new DnsModel
-            {
-                Host = "localhost",
-            })
-        </p>
-        <p>
-            @Html.ActionLink("Azure SQL Server Control", "", "SqlServer")
-        </p>
-        <p>
-            @Html.ActionLink("WebAPI Test", "", "Call")
-        </p>
-        <p>
-            @Html.ActionLink("KeyVault Test", "", "KeyVault")
-        </p>
-        <p>
-            @Html.ActionLink("EventHub Test", "", "EventHub")
-        </p>
-        <p>
-            @Html.ActionLink("Storage Test", "", "Storage")
-        </p>
-        <p>
-            @Html.ActionLink("Azure Cache for Redis Test", "", "Redis")
-        </p>
-        <p>
-            @Html.ActionLink("IoT Hub Test", "", "Iot")
-        </p>
-        <p>
-            @Html.ActionLink("Controller for Health check", "", "Health")
-        </p>
-        <p></p>
-        <p><a href="https://github.com/tmctono/WebInvestigation/blob/master/README.md">About...</a></p>
-    </div>
+<div class="text-center">
+    <h1 class="display-4">Investigation Menu</h1>
+    <p>[At Server]</p>
+    <h2>Diagnostics</h2>
+    <p>
+        @Html.ActionLink("Information HTTP, Server", "", "Info")
+    </p>
+    <p>
+        @Html.ActionLink("PING to '127.0.0.1'", "Ping", new PingModel
+        {
+            Ip = "127.0.0.1",
+        })
+    </p>
+    <p>
+        @Html.ActionLink("Resolve DNS host name 'localhost'", "Dns", new DnsModel
+        {
+            Host = "localhost",
+        })
+    </p>
+    <h2>Service connection from Web Server</h2>
+    <p>
+        @Html.ActionLink("Azure SQL Server Control", "", "SqlServer")
+    </p>
+    <p>
+        @Html.ActionLink("WebAPI Test", "", "Call")
+    </p>
+    <p>
+        @Html.ActionLink("KeyVault Test", "", "KeyVault")
+    </p>
+    <p>
+        @Html.ActionLink("EventHub Test", "", "EventHub")
+    </p>
+    <p>
+        @Html.ActionLink("Storage Test", "", "Storage")
+    </p>
+    <p>
+        @Html.ActionLink("Azure Cache for Redis Test", "", "Redis")
+    </p>
+    <p>
+        @Html.ActionLink("IoT Hub Test", "", "Iot")
+    </p>
+    <h2>Dummy endpoint</h2>
+    <p>
+        @Html.ActionLink("Controller for Health check", "", "Health")
+    </p>
+    <h2>Fail Generator</h2>
+    <p>
+        @Html.ActionLink("Controller of Http Status Code = 500", "HttpStatus", new HttpStatus
+        {
+            Code = 500,
+        })
+    </p>
+    <p>
+        @Html.ActionLink("Throw Exception", "ThrowException")
+    </p>
+    <p>
+        @Html.ActionLink("Stack Overflow", "StackOverFlow")
+    </p>
+    <p>
+        @Html.ActionLink("CPU Stress around 20 seconds", "Cpu")
+    </p>
+    <p></p>
+    <p><a href="https://github.com/tmctono/WebInvestigation/blob/master/README.md">About...</a></p>
+</div>
